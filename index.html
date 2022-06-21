@@ -34,6 +34,7 @@
       display: block; 
       width: 100%; 
       border: 1px solid #ccc;
+      border-radius: 4px;
       box-sizing: border-box;
       padding: 8px;
       margin: 0 12px 12px 0;
@@ -48,6 +49,20 @@
       font-size: 18px;
       padding: 0;
       margin-top: -3px;
+    }
+
+    .note-edit {
+      display: none;
+      box-sizing: border-box; 
+      width: 100%;
+    }
+
+    .note-box.editing .note-text {
+      display: none;
+    }
+
+    .note-box.editing .note-edit {
+      display: block;
     }
 
     @media screen and (min-width: 576px) {
@@ -105,19 +120,31 @@
     <section class="content">
       <div 
         class="note-box"
-        v-for="(note, idx) in notes" 
-        :key="idx" 
+        :class="{ editing: note === editedNote }"
+        v-for="note in notes" 
+        :key="note.id" 
+        @dblclick="editNote(note)"
       >
-        <div class="top" style="margin-bottom: 8px;">
-          <i>{{ note.date }}</i>
-          <button 
-            class="close" 
-            @click="removeNote(note)"
-          >
-            x
-          </button>
+        <div>
+          <div class="top" style="margin-bottom: 8px;">
+            <i>{{ note.date }}</i>
+            <button 
+              class="close" 
+              @click="removeNote(note)"
+            >
+              x
+            </button>
+          </div>
+          <span class="note-text">{{ note.text }}</span>
         </div>
-        {{ note.text }}
+        <input 
+          class="note-edit" 
+          v-model="note.text" 
+          v-note-focus="note === editedNote"
+          @keyup.enter="doneEdit(note)"
+          @keyup.esc="cancelEdit(note)"
+          @blur="doneEdit(note)"
+        >
       </div>
     </section>
   </div>
@@ -128,14 +155,19 @@
         title: 'Vue Notes',
         note: {
           text: '',
-          date: '',
         },
         notes: [],
+        editedNote: null,
       },
       methods: {
         addNote() {
-          const { text, date } = this.note;
+          const { text } = this.note;
+          const value = text && text.trim();
+          if (!value) {
+            return;
+          }
           this.notes.push({
+            id: (this.notes.length + 1).toString(),
             text,
             date: new Date(Date.now()).toLocaleString(),
           });
@@ -144,6 +176,24 @@
         removeNote(note) {
           const index = this.notes.indexOf(note);
           this.notes.splice(index, 1);
+        },
+        editNote(note) {
+          this.beforeCacheNote = note.text;
+          this.editedNote = note;
+        },
+        cancelEdit(note) {
+          note.text = this.beforeCacheNote;
+          this.editedNote = null;
+        },
+        doneEdit(note) {
+          if (!this.editedNote) {
+            return;
+          }
+          this.editedNote = null;
+          note.text = note.text.trim();
+          if (!note.text) {
+            this.removeNote(note);
+          }
         },
       },
       mounted() {
@@ -156,7 +206,14 @@
             localStorage.setItem('vue-notes', JSON.stringify(this.notes));
           }
         }
-      }
+      },
+      directives: {
+        'note-focus': function(el, binding) {
+          if (binding.value) {
+            el.focus();
+          }
+        }
+      },
     });
   </script>
 </body>
