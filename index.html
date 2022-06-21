@@ -15,104 +15,72 @@
         font-family: "Montserrat";
         /* font: 14px/1.6'Avenir', Helvetica, Arial, sans-serif; */
     }
-    /* i {
-        font-size: 12px;
-        clear: both;
-        font-style: normal;
-        display: block;
-    }
-    h2 {
-        margin: 10px
-    }
-    #app {
-        display: flex;
-        flex-flow: column wrap;
-        margin: 0 auto;
-        height: 100vh;
-        justify-content: flex-start;
-        align-content: flex-start;
-    }
-    #app > * {
-        border-radius: 2px;
-        transition: all ease 0.3s;
-    }
-    #app>div {
-        position: relative;
-        width: 200px;
-        padding: 8px;
-        margin: 10px;
-        border: 1px solid #ccc;
-    }
     
-    textarea {
-        display: block;
-        max-width: 200px;
-        padding: 8px;
-        margin: 10px;
-        border: 1px solid #ccc;
+    .add-note-box textarea {
+      box-sizing: border-box;
+      width: 100%;
     }
-    textarea:focus {
-        border-color: black;
+
+    .add-note-box div {
+      padding-bottom: 6px;
     }
-    button {
-        padding: 0;
-        cursor: pointer;
-        background: transparent;
-        border: 0;
-        -webkit-appearance: none;
+
+    .add-note-box .button {
+      width: 100%;
+      padding: 6px;
     }
-    .button {
-        display: block;
-        box-sizing: content-box;
-        width: 200px;
-        padding: 8px;
-        margin: 0 10px 20px 10px;
-        border: 1px solid #ccc;
-        cursor: pointer;
-        clear: both;
+
+    .note-box {
+      display: block; 
+      width: 100%; 
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      padding: 8px;
+      margin: 0 12px 12px 0;
+      float: left;
     }
-    .button:hover {
-        background-color: black;
-        color: white;
-        border-color: black;
+
+    .note-box .top button.close {
+      float: right;
+      border: none;
+      background: none;
+      font-weight: bolder;
+      font-size: 18px;
+      padding: 0;
+      margin-top: -3px;
     }
-    .top {
-        text-align: right;
-        display: flex;
-        flex-direction: row-reverse;
-        justify-content: space-between;
-        margin-bottom: 0.5em;
-    }*/
-    
-    /* .close {
-        text-align: right;
-        height: 10px;
-        width: 10px;
-        position: relative;
-        box-sizing: border-box;
-        line-height: 10px;
-        display: inline-block;
+
+    @media screen and (min-width: 576px) {
+      .note-box,
+      .add-note-box textarea,
+      .add-note-box .button {
+        width: 47%;
+      }
     }
-    .close:before, .close:after {
-        transform: rotate(-45deg);
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        margin-top: -1px;
-        margin-left: -5px;
-        display: block;
-        height: 2px;
-        width: 10px;
-        background-color: black;
-        transition: all 0.25s ease-out;
+
+    @media screen and (min-width: 768px) {
+      .note-box,
+      .add-note-box textarea,
+      .add-note-box .button {
+        width: 48%;
+      }
     }
-    .close:after {
-        transform: rotate(-135deg);
+
+    @media screen and (min-width: 992px) {
+      .note-box,
+      .add-note-box textarea,
+      .add-note-box .button {
+        width: 32%;
+      }
     }
-    .close:hover:before, .close:hover:after {
-        transform: rotate(0deg);
-    }  */
+
+    @media screen and (min-width: 1200px) {
+      .note-box,
+      .add-note-box textarea,
+      .add-note-box .button {
+        width: 23.5%;
+      }
+    }
   </style>
 </head>
 <body>
@@ -123,6 +91,7 @@
 
     <section class="add-note-box">
       <textarea 
+        rows="2"
         autofocus 
         placeholder="insert your note ..." 
         v-model="note.text"
@@ -135,34 +104,18 @@
 
     <section class="content">
       <div 
+        class="note-box"
         v-for="(note, idx) in notes" 
         :key="idx" 
-        style="
-          display: inline-block; 
-          width: 33.33%; 
-          border: 1px solid #ccc;
-          box-sizing: border-box;
-          padding: 8px;
-          margin: 16px;
-        "
       >
         <div class="top" style="margin-bottom: 8px;">
           <i>{{ note.date }}</i>
           <button 
             class="close" 
             @click="removeNote(note)"
-            style="
-              float: right;
-              border: none;
-              background: none;
-              font-weight: bolder;
-              font-size: 18px;
-              padding: 0;
-              margin-top: -3px;
-            "
           >
             x
-        </button>
+          </button>
         </div>
         {{ note.text }}
       </div>
