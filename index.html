@@ -19,6 +19,7 @@
     .add-note-box textarea {
       box-sizing: border-box;
       width: 100%;
+      padding: 6px;
     }
 
     .add-note-box div {
@@ -30,6 +31,11 @@
       padding: 6px;
     }
 
+    .content {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
     .note-box {
       display: block; 
       width: 100%; 
@@ -38,7 +44,6 @@
       box-sizing: border-box;
       padding: 8px;
       margin: 0 12px 12px 0;
-      float: left;
     }
 
     .note-box .top button.close {
@@ -55,6 +60,8 @@
       display: none;
       box-sizing: border-box; 
       width: 100%;
+      font-size: 15px;
+      font-family: "Montserrat";
     }
 
     .note-box.editing .note-text {
@@ -108,7 +115,7 @@
       <textarea 
         rows="2"
         autofocus 
-        placeholder="insert your note ..." 
+        placeholder="insert your note, double click note to edit ..." 
         v-model="note.text"
         @keyup.enter="addNote"
       ></textarea>
