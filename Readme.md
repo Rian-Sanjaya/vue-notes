@@ -1,3 +1,3 @@
 ### Live demo:
 
-https://rian-sanjaya.github.io/vue-notes
+https://guileless-kangaroo-e6c1ae.netlify.app/
